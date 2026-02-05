@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Airline</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .flight {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>My Airline ✈️</h1>
+
+  <h3>Search Flights</h3>
+
+  <label>From:</label><br>
+  <input id="from" placeholder="NBO"><br><br>
+
+  <label>To:</label><br>
+  <input id="to" placeholder="DXB"><br><br>
+
+  <label>Date:</label><br>
+  <input id="date" type="date"><br><br>
+
+  <button onclick="searchFlights()">Search Flights</button>
+
+  <h3>Available Flights</h3>
+  <div id="results"></div>
+
+  <script>
+    async function searchFlights() {
+      const from = document.getElementById("from").value;
+      const to = document.getElementById("to").value;
+      const date = document.getElementById("date").value;
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "Loading flights...";
+
+      const response = await fetch(
+        `/api/searchFlights?from=${from}&to=${to}&date=${date}`
+      );
+
+      const data = await response.json();
+      resultsDiv.innerHTML = "";
+
+      const offers = data.data;
+
+      offers.forEach(offer => {
+        const airline = offer.owner.name;
+        const price = offer.total_amount + " " + offer.total_currency;
+
+        const flightDiv = document.createElement("div");
+        flightDiv.className = "flight";
+
+        flightDiv.innerHTML = `
+          <strong>${airline}</strong><br>
+          Price: ${price}<br>
+          <button>Book Flight</button>
+        `;
+
+        resultsDiv.appendChild(flightDiv);
+      });
+    }
+  </script>
+</body>
+  </html>
