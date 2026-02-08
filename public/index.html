@@ -68,12 +68,20 @@
         flightDiv.innerHTML = `
           <strong>${airline}</strong><br>
           Price: ${price}<br>
-          <button>Book Flight</button>
+          <button onclick="bookFlight('${airline}', '${price}')">
+  Book Flight
+</button>
         `;
 
         resultsDiv.appendChild(flightDiv);
       });
-    }
+    } function bookFlight(airline, price) {
+  window.location.href =
+    "book.html?airline=" +
+    encodeURIComponent(airline) +
+    "&price=" +
+    encodeURIComponent(price);
+  }
   </script>
 </body>
   </html>
